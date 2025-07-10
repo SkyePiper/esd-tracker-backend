@@ -9,10 +9,12 @@ from __future__ import annotations
 from abc import ABC, abstractmethod, abstractproperty
 from os import getenv
 from pathlib import Path
+from sqlite3 import OperationalError
 from typing import Any, Coroutine
 
 from aiosqlite import Connection, Cursor, connect
-from common.database.base_database.database_errors import RecordDoesNotExistError, RecordStillExistsError
+from common.database.base_database.database_errors import (
+    RecordDoesNotExistError, RecordStillExistsError)
 from common.database.base_database.database_models import TableColumn
 from common.enums.database_tables import Table
 from dotenv import load_dotenv
@@ -137,22 +139,27 @@ class DatabaseAdapter(ABC):
         :return: The next ID
         """
 
-        next_id = await (
-            await self._cursor.execute(
-                f"""
-            SELECT id
-            FROM {self._table}
-            ORDER BY id DESC
-            LIMIT 1
-            """
-            )
-        ).fetchone()
+        try:
 
-        if next_id is None:
-            # Assume no items in db
+            next_id = await (
+                await self._cursor.execute(
+                    f"""
+                SELECT id
+                FROM {self._table}
+                ORDER BY id DESC
+                LIMIT 1
+                """
+                )
+            ).fetchone()
+
+            if next_id is None:
+                # Assume no items in db
+                return 0
+
+            return next_id[0] + 1
+        except OperationalError:
+            # There is no id Field, return 0 as a fallback
             return 0
-
-        return next_id[0] + 1
 
     @abstractmethod
     async def get_all_records(self) -> list[BaseModel]:
