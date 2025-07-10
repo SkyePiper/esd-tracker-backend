@@ -136,7 +136,7 @@ class UserDatabaseAdaptor(DatabaseAdapter):
                 forename="Admin",
                 surname="Admin",
                 email=getenv("ADMIN_EMAIL"),
-                permissions=0,
+                permissions=1,
                 password=await hash_password(getenv("ADMIN_PASSWORD")),
             )
         )
