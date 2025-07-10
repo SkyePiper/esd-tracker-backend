@@ -20,6 +20,8 @@ class UserDatabaseAdaptor(DatabaseAdapter):
     """Adaptor for the User Database"""
 
     _table_columns = [
+        TableColumn(name="id", type=DatabaseColumnType.INTEGER, is_primary_key=True),
+        TableColumn(name="created", type=DatabaseColumnType.TEXT, can_be_null=False),
         TableColumn(name="forename", type=DatabaseColumnType.TEXT, can_be_null=False),
         TableColumn(name="surname", type=DatabaseColumnType.TEXT, can_be_null=False),
         TableColumn(name="email", type=DatabaseColumnType.TEXT, can_be_null=False, is_unique=True),
