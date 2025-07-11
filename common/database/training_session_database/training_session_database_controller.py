@@ -100,7 +100,10 @@ class TrainingSessionController(DatabaseController):
 
         await self.check_permissions(user.permissions, [Permissions.GET_TRAINING_SESSION])
 
-        return await self.__user_session_inter_database_adapter.get_all_records_with_user_id(user_id)
+        try:
+            return await self.__user_session_inter_database_adapter.get_all_records_with_user_id(user_id)
+        except RecordDoesNotExistError:
+            return []
 
     async def mark_user_attendance(
         self, user: UserModel, session_id: int, user_email: str, attendance: Attendance
