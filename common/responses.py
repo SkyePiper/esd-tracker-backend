@@ -54,7 +54,7 @@ class UnknownResourceResponseModel(BaseResponseModel):
 class ValidationErrorResponseModel(BaseResponseModel):
     """Model for when there is a validation error"""
 
-    status: int = Field(status.HTTP_422_UNPROCESSABLE_ENTITY, frozen=True)
+    status: int = Field(status.HTTP_422_UNPROCESSABLE_CONTENT, frozen=True)
     message: str = Field("Unable to process data; Invalid data given.")
     data: dict = Field()
 
