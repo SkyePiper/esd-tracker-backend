@@ -80,6 +80,7 @@ class DatabaseController(ABC):
         :return:
         :raises UnauthorisedError: If the user does not have any of the required permissions
         """
+
         valid_permissions.append(Permissions.ADMINISTER)
         for permission in valid_permissions:
             if user_permissions & permission:

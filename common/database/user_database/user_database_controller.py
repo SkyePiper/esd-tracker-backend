@@ -38,8 +38,8 @@ class UserController(DatabaseController):
         :param record_id: The ID of the record to get
         :return: The record
         """
-        await self.check_permissions(user.permissions, [Permissions.GET_USER])
 
+        await self.check_permissions(user.permissions, [Permissions.GET_USER])
         return await self.__user_adapter.get_record_by_id(record_id)
 
     async def add_record(self, user: UserModel, new_record: UserModel) -> UserModel:

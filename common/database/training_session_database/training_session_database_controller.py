@@ -26,7 +26,6 @@ from common.database.user_session_inter_database.user_session_inter_models impor
 )
 from common.enums.permissions import Permissions
 from common.enums.user_session_attendance import Attendance
-from pydantic import BaseModel
 
 
 class TrainingSessionController(DatabaseController):

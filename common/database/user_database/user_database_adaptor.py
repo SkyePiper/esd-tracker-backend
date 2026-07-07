@@ -15,6 +15,7 @@ from common.database.base_database.database_models import TableColumn
 from common.database.user_database.user_models import UserModel, UserUpdateModel
 from common.enums.database_column_types import DatabaseColumnType
 from common.enums.database_tables import Table
+from common.enums.permissions import Permissions
 
 
 class UserDatabaseAdaptor(DatabaseAdapter):
@@ -137,7 +138,7 @@ class UserDatabaseAdaptor(DatabaseAdapter):
                 forename="Admin",
                 surname="Admin",
                 email=getenv("ADMIN_EMAIL"),
-                permissions=1,
+                permissions=Permissions.ADMINISTER,
                 password=await hash_password(getenv("ADMIN_PASSWORD")),
             )
         )
@@ -147,7 +148,7 @@ class UserDatabaseAdaptor(DatabaseAdapter):
                 forename="Default",
                 surname="User",
                 email=getenv("DEFAULT_USER_EMAIL"),
-                permissions=1,
+                permissions=Permissions.GET_TRAINING_SESSION,
                 password=await hash_password(getenv("DEFAULT_USER_PASSWORD")),
             )
         )

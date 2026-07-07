@@ -13,12 +13,15 @@ from sqlite3 import OperationalError
 from typing import Any, Coroutine
 
 from aiosqlite import Connection, Cursor, connect
-from common.database.base_database.database_errors import (
-    RecordDoesNotExistError, RecordStillExistsError)
-from common.database.base_database.database_models import TableColumn
-from common.enums.database_tables import Table
 from dotenv import load_dotenv
 from pydantic import BaseModel
+
+from common.database.base_database.database_errors import (
+    RecordDoesNotExistError,
+    RecordStillExistsError,
+)
+from common.database.base_database.database_models import TableColumn
+from common.enums.database_tables import Table
 
 load_dotenv()
 
@@ -28,7 +31,7 @@ class DatabaseAdapter(ABC):
 
     __database_path: Path = Path("esdTrackerDb.sqlite")
     """The path to the database"""
-    _database: Connection = connect(__database_path)
+    _database: Connection
     """The connection to the database, shared between all instances of this class"""
     _cursor: Cursor
     """The cursor for the table"""
@@ -97,11 +100,8 @@ class DatabaseAdapter(ABC):
 
         self._database = await connect(self.__database_path)
         self._cursor = await self._database.cursor()
-
         # Check if the table exists, and if not create it
-        table = await (
-            await self._cursor.execute(
-                f"""
+        table = await (await self._cursor.execute(f"""
                 SELECT
                     tbl_name
                 FROM
@@ -110,9 +110,7 @@ class DatabaseAdapter(ABC):
                     type='table'
                 AND
                     tbl_name='{self._table}';
-                """
-            )
-        ).fetchone()
+                """)).fetchone()
 
         if table is None:
             await self._cursor.execute(
@@ -124,6 +122,14 @@ class DatabaseAdapter(ABC):
             await self.load_db()
 
             await self._add_default_records()
+
+    async def disconnect(self):
+        """Disconnects from the database
+
+        :return:
+        """
+
+        await self._database.close()
 
     async def get_count(self) -> int:
         """Gets the count of records in the database
@@ -141,16 +147,12 @@ class DatabaseAdapter(ABC):
 
         try:
 
-            next_id = await (
-                await self._cursor.execute(
-                    f"""
+            next_id = await (await self._cursor.execute(f"""
                 SELECT id
                 FROM {self._table}
                 ORDER BY id DESC
                 LIMIT 1
-                """
-                )
-            ).fetchone()
+                """)).fetchone()
 
             if next_id is None:
                 # Assume no items in db
@@ -307,14 +309,10 @@ class DatabaseAdapter(ABC):
         :return: The records
         """
 
-        data = await (
-            await self._execute_query(
-                f"""
+        data = await (await self._execute_query(f"""
                 SELECT *
                 FROM {self._table}
-                """
-            )
-        ).fetchall()
+                """)).fetchall()
 
         return [tuple(item) for item in data]
 
@@ -326,16 +324,12 @@ class DatabaseAdapter(ABC):
         :raises RecordDoesNotExistError: If the record does not exist
         """
 
-        data = await (
-            await self._execute_query(
-                f"""
+        data = await (await self._execute_query(f"""
                 SELECT *
                 FROM {self._table}
                 WHERE
                     id={record_id}
-                """
-            )
-        ).fetchone()
+                """)).fetchone()
 
         if data is None:
             raise RecordDoesNotExistError(f"No record with an ID of {record_id} exists")
@@ -350,17 +344,13 @@ class DatabaseAdapter(ABC):
         :raises RecordDoesNotExistError: If the record does not exist
         """
 
-        data = await (
-            await self._execute_query(
-                f"""
+        data = await (await self._execute_query(f"""
                 SELECT *
                 FROM {self._table}
                 WHERE (
                     {'\n\t'.join(f"{key}='{value}' AND " for key, value in record_ids.items()).strip('AND ')}
                 )
-                """
-            )
-        ).fetchone()
+                """)).fetchone()
 
         if data is None:
             raise RecordDoesNotExistError(
@@ -378,16 +368,12 @@ class DatabaseAdapter(ABC):
         :raises RecordDoesNotExistError: If no record matches the value fo the given field
         """
 
-        data = await (
-            await self._execute_query(
-                f"""
+        data = await (await self._execute_query(f"""
                 SELECT *
                 FROM {self._table}
                 WHERE
                     {field}='{value}'
-                """
-            )
-        ).fetchone()
+                """)).fetchone()
 
         if data is None:
             raise RecordDoesNotExistError(f"No record with {field} of {value} exists")
@@ -403,16 +389,12 @@ class DatabaseAdapter(ABC):
         :raises RecordDoesNotExistError: If no record matches the value of the given field
         """
 
-        data = await (
-            await self._execute_query(
-                f"""
+        data = await (await self._execute_query(f"""
                 SELECT *
                 FROM {self._table}
                 WHERE
                     {field}='{value}'
-                """
-            )
-        ).fetchall()
+                """)).fetchall()
         # TODO: The above should really be a fetchmany() with a limit. This can be a future thing
 
         if not data:
@@ -427,14 +409,12 @@ class DatabaseAdapter(ABC):
         :return: The data in the database
         """
 
-        row_id = await self._database.execute_insert(
-            f"""
+        row_id = await self._database.execute_insert(f"""
             INSERT INTO {self._table}
             VALUES (
             \t{('\n\t'.join(['"' + str(value) + '",' for value in data.values()])).strip(',')}
             )
-            """
-        )
+            """)
 
         await self._database.commit()
 
@@ -452,14 +432,12 @@ class DatabaseAdapter(ABC):
         :return: The data in the database
         """
 
-        row_id = await self._database.execute_insert(
-            f"""
+        row_id = await self._database.execute_insert(f"""
             INSERT INTO {self._table}
             VALUES (
             \t{('\n\t'.join(['"' + str(value) + '",' for value in data.values()])).strip(',')}
             )
-            """
-        )
+            """)
 
         await self._database.commit()
 
@@ -478,16 +456,14 @@ class DatabaseAdapter(ABC):
         :return: The updated record
         """
 
-        await self._database.execute(
-            f"""
+        await self._database.execute(f"""
             UPDATE {self._table}
             SET 
                 id={record_id},
                 {'\n\t'.join(f"{key}='{value}'," for key, value in new_values.items()).strip(',')}
             WHERE
                 id={record_id}
-            """
-        )
+            """)
         await self._database.commit()
 
         return await self._get_record_by_id(record_id)
@@ -500,16 +476,14 @@ class DatabaseAdapter(ABC):
         :return: The updated record
         """
 
-        await self._database.execute(
-            f"""
+        await self._database.execute(f"""
             UPDATE {self._table}
             SET
                 {'\n\t'.join(f"{key}='{value}'," for key, value in new_values.items()).strip(',')}
             WHERE (
                 {'\n\t'.join(f"{key}='{value}' AND " for key, value in keys.items()).strip('AND ')}
             )
-            """
-        )
+            """)
         await self._database.commit()
 
         return await self._get_record_by_ids(keys)
@@ -522,13 +496,11 @@ class DatabaseAdapter(ABC):
         :raises RecordStillExistsError: If the record could not be deleted
         """
 
-        await self._database.execute(
-            f"""
+        await self._database.execute(f"""
             DELETE FROM {self._table}
             WHERE
                 id={record_id}
-            """
-        )
+            """)
 
         await self._database.commit()
 
@@ -548,14 +520,12 @@ class DatabaseAdapter(ABC):
         :raises RecordStillExistsError: If the record could not be deleted
         """
 
-        await self._database.execute(
-            f"""
+        await self._database.execute(f"""
             DELETE FROM {self._table}
             WHERE (
                 {'\n\t'.join(f"{key}='{value}' AND " for key, value in keys.items()).strip('AND ')}
             )
-            """
-        )
+            """)
 
         await self._database.commit()
 

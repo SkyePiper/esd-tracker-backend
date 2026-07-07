@@ -46,6 +46,9 @@ async def lifespan(app: FastAPI):
     yield  # This will stop here until it needs to do the shutdown events
     # Shutdown events
 
+    for database in [UserDatabaseAdaptor(), TrainingSessionDatabaseAdaptor(), UserSessionInterDatabaseAdapter()]:
+        await database.disconnect()
+
 
 app = FastAPI(lifespan=lifespan)  #
 
