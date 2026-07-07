@@ -43,9 +43,9 @@ jobs:
 
     - name: Check Formatting
       run: |
-        isort . -c
-        autoflake . -c
-        black . --check
+        python -m poetry run isort . -c
+        python -m poetry run autoflake . -c
+        python -m poetry run black . --check
 
     - name: Lint
-      run: pylint .
+      run: python -m pylint .
