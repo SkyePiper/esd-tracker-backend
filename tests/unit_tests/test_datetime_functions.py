@@ -8,6 +8,10 @@ import pytest
 from dotenv import load_dotenv
 from pytest import approx
 
+__ENV_PATH: Final[Path] = Path(__file__).parent.joinpath(".env")
+"""The path to the .env file"""
+load_dotenv(__ENV_PATH.absolute(), override=True)
+
 from common.helper_functions.date_and_time import (
     __JWT_TIMEOUT,
     create_user_jwt_expiry_date,
@@ -18,10 +22,6 @@ from common.helper_functions.date_and_time import (
     validate_future_datetime_from_string,
 )
 from common.helper_functions.errors import InvalidDatetimeFormatError
-
-__ENV_PATH: Final[Path] = Path(__file__).parent.joinpath(".env")
-"""The path to the .env file"""
-load_dotenv(__ENV_PATH.absolute(), override=True)
 
 
 def test_get_datetime_now():
