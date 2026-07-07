@@ -1,17 +1,24 @@
 """Endpoints for the training sessions"""
 
+from fastapi import APIRouter
+
 from common.auth.auth import VALIDATE_USER
-from common.database.training_session_database.training_session_database_controller import \
-    TrainingSessionController
+from common.database.training_session_database.training_session_database_controller import (
+    TrainingSessionController,
+)
 from common.database.training_session_database.training_session_models import (
-    TrainingSessionAttendanceResponseModel, TrainingSessionModel,
-    TrainingSessionResponseModel, TrainingSessionsResponseModel,
-    TrainingSessionUpdateModel, TrainingSessionUserAttendanceResponseModel)
-from common.database.user_session_inter_database.user_session_inter_models import \
-    UserSessionInterResponseModel
+    TrainingSessionAttendanceResponseModel,
+    TrainingSessionModel,
+    TrainingSessionResponseModel,
+    TrainingSessionsResponseModel,
+    TrainingSessionUpdateModel,
+    TrainingSessionUserAttendanceResponseModel,
+)
+from common.database.user_session_inter_database.user_session_inter_models import (
+    UserSessionInterResponseModel,
+)
 from common.enums.user_session_attendance import Attendance
 from common.responses import DEFAULT_RESPONSES, SuccessResponseModel
-from fastapi import APIRouter
 
 router = APIRouter(
     prefix="/training_sessions",

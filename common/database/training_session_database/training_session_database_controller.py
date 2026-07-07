@@ -9,7 +9,9 @@ can only import adapters.
 
 from common.database.base_database.database_controller import DatabaseController
 from common.database.base_database.database_errors import RecordDoesNotExistError
-from common.database.training_session_database.training_session_database_adaptor import TrainingSessionDatabaseAdaptor
+from common.database.training_session_database.training_session_database_adaptor import (
+    TrainingSessionDatabaseAdaptor,
+)
 from common.database.training_session_database.training_session_models import (
     TrainingSessionModel,
     TrainingSessionUpdateModel,
@@ -26,7 +28,6 @@ from common.database.user_session_inter_database.user_session_inter_models impor
 )
 from common.enums.permissions import Permissions
 from common.enums.user_session_attendance import Attendance
-from pydantic import BaseModel
 
 
 class TrainingSessionController(DatabaseController):

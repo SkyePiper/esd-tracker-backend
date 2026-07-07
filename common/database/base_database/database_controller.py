@@ -11,10 +11,11 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 
+from pydantic import BaseModel
+
 from common.database.user_database.user_models import UserModel
 from common.enums.permissions import Permissions
 from common.helper_functions.errors import UnauthorisedError
-from pydantic import BaseModel
 
 
 class DatabaseController(ABC):
@@ -80,6 +81,7 @@ class DatabaseController(ABC):
         :return:
         :raises UnauthorisedError: If the user does not have any of the required permissions
         """
+
         valid_permissions.append(Permissions.ADMINISTER)
         for permission in valid_permissions:
             if user_permissions & permission:

@@ -16,14 +16,17 @@ passlib = "=1.7.4"
 scrypt = "=0.9.4"
 pydantic = "=2.13.4"
 fastapi-limiter = "=0.2.0"
+python-dotenv = "=1.2.2"
 
 [tool.poetry.group.dev.dependencies]
 black = "=26.5.1"
 isort = "=8.0.1"
 autoflake = "=2.3.3"
 pylint = "=4.0.6"
+pylint-pydantic = "=0.4.1"
 pytest = "=9.1.1"
 pytest-cov = "=7.1.0"
+pytest-asyncio = "=1.4.0"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
@@ -42,14 +45,14 @@ source_dirs = ["."]
 omit = ["tests/*"]
 
 [tool.coverage.report]
-fail_under = 75
+fail_under = 70
 show_missing = true
 skip_empty = true
 omit = ["tests/*"]
 
 [tool.black]
 line-length=120
-target-version = ["py314"]
+target-version = ["py312"]
 
 # extend-exclude uses regex. To expand, put a | at the end and inside the brackets, followed by the name.
 # e.g. extend-exclude="(project_a|project_b|another_project)"

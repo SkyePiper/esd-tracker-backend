@@ -1,3 +1,5 @@
+"""The main module"""
+
 from contextlib import asynccontextmanager
 from typing import Annotated
 
@@ -45,6 +47,9 @@ async def lifespan(app: FastAPI):
 
     yield  # This will stop here until it needs to do the shutdown events
     # Shutdown events
+
+    for database in [UserDatabaseAdaptor(), TrainingSessionDatabaseAdaptor(), UserSessionInterDatabaseAdapter()]:
+        await database.disconnect()
 
 
 app = FastAPI(lifespan=lifespan)  #
@@ -137,7 +142,7 @@ async def handle_unauthorised_error(
 
 
 @app.exception_handler(RateLimitedError)
-async def handle_unauthorised_error(request: Request, error: RateLimitedError) -> JSONResponse:
+async def handle_rate_limited_error(request: Request, error: RateLimitedError) -> JSONResponse:
     """Handles an unauthorised error
 
     :param request: The incoming request

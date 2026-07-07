@@ -1,10 +1,10 @@
 """Models for the user and training sessions interim table"""
 
-from common.database.base_database.database_models import (DataModel,
-                                                           UpdateDataModel)
+from pydantic import BaseModel, Field
+
+from common.database.base_database.database_models import UpdateDataModel
 from common.enums.user_session_attendance import Attendance
 from common.responses import SuccessResponseModel
-from pydantic import BaseModel, Field
 
 
 class UserSessionInterModel(BaseModel):

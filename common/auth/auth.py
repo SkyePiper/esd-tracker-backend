@@ -2,7 +2,12 @@
 
 from asyncio import sleep
 from os import getenv, urandom
-from typing import Annotated
+from typing import Annotated, Final
+
+from dotenv import load_dotenv
+from fastapi import Depends
+from fastapi.security import OAuth2PasswordBearer
+from jwt import InvalidTokenError, decode, encode
 
 from common.auth.auth_errors import AuthTimeoutError, InvalidAuthError
 from common.auth.auth_models import JwtModel, UserJwtDataModel
@@ -10,11 +15,9 @@ from common.auth.password_utils import verify_password
 from common.database.base_database.database_errors import RecordDoesNotExistError
 from common.database.user_database.user_database_adaptor import UserDatabaseAdaptor
 from common.database.user_database.user_models import UserModel
-from common.helper_functions.date_and_time import get_utc_time_now, validate_future_datetime_from_string
-from dotenv import load_dotenv
-from fastapi import Depends
-from fastapi.security import OAuth2PasswordBearer
-from jwt import InvalidTokenError, decode, encode
+from common.helper_functions.date_and_time import (
+    validate_future_datetime_from_string,
+)
 
 load_dotenv()
 
@@ -106,4 +109,4 @@ async def create_user_jwt(user: UserModel) -> JwtModel:
     return JwtModel(access_token=await create_access_token(user_jwt), token_type="bearer", data=user_jwt.model_dump())
 
 
-VALIDATE_USER = Annotated[UserModel, Depends(get_user_from_jwt)]
+VALIDATE_USER: Final = Annotated[UserModel, Depends(get_user_from_jwt)]

@@ -14,6 +14,15 @@ jobs:
         os: [ubuntu-latest, windows-latest]
         python-version: [3.12]
 
+    env:
+      JWT_SECRET: ${{ vars.JWT_SECRET }}
+      JWT_ALGORITHM: ${{ vars.JWT_ALGORITHM }}
+      JWT_EXPIRE_MINUTES: ${{ vars.JWT_EXPIRE_MINUTES }}
+      ADMIN_EMAIL: ${{ vars.ADMIN_EMAIL }}
+      ADMIN_PASSWORD: ${{ vars.ADMIN_PASSWORD }}
+      DEFAULT_USER_EMAIL: ${{ vars.DEFAULT_USER_EMAIL }}
+      DEFAULT_USER_PASSWORD: ${{ vars.DEFAULT_USER_PASSWORD }}
+
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
@@ -34,9 +43,9 @@ jobs:
 
     - name: Check Formatting
       run: |
-        python -m isort . -c
-        python -m autoflake . -c
-        python -m black . --check
+        python -m poetry run isort . -c
+        python -m poetry run autoflake . -c
+        python -m poetry run black . --check
 
     - name: Lint
-      run: python -m pylint .
+      run: python -m poetry run pylint .

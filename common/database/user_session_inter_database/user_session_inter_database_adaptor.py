@@ -4,20 +4,16 @@ This handles operations with the database. This should not be used directly, rat
 middle-man.
 """
 
-from os import getenv
-from typing import Any
+from pydantic import BaseModel
 
-from common.auth.password_utils import hash_password
 from common.database.base_database.database_adapter import DatabaseAdapter
 from common.database.base_database.database_models import TableColumn
-from common.database.user_database.user_models import UserModel, UserUpdateModel
 from common.database.user_session_inter_database.user_session_inter_models import (
     UserSessionInterModel,
     UserSessionInterUpdateModel,
 )
 from common.enums.database_column_types import DatabaseColumnType
 from common.enums.database_tables import Table
-from pydantic import BaseModel
 
 
 class UserSessionInterDatabaseAdapter(DatabaseAdapter):

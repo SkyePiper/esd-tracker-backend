@@ -1,10 +1,11 @@
 """Endpoints for getting data about enums"""
 
+from fastapi import APIRouter
+
 from common.enums.models import EnumItemModel, EnumModel, EnumResponseModel
 from common.enums.permissions import Permissions
 from common.enums.user_session_attendance import Attendance
 from common.responses import DEFAULT_RESPONSES
-from fastapi import APIRouter
 
 router = APIRouter(
     prefix="/enums",

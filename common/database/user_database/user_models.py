@@ -1,12 +1,13 @@
 """Models for the user"""
 
-from datetime import datetime
+from pydantic import EmailStr, Field, field_validator
 
 from common.database.base_database.database_models import DataModel, UpdateDataModel
-from common.enums.permissions import Permissions
-from common.helper_functions.date_and_time import get_string_datetime_now, validate_datetime
-from common.responses import BaseResponseModel, SuccessResponseModel
-from pydantic import BaseModel, ConfigDict, EmailStr, Field, SecretStr, field_validator
+from common.helper_functions.date_and_time import (
+    get_string_datetime_now,
+    validate_datetime,
+)
+from common.responses import SuccessResponseModel
 
 
 class UserModel(DataModel):

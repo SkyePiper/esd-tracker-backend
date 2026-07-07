@@ -3,12 +3,18 @@
 from datetime import UTC, datetime, timedelta
 from os import getenv
 
-from common.helper_functions.errors import InvalidDatetimeFormatError
 from dotenv import load_dotenv
+
+from common.helper_functions.errors import InvalidDatetimeFormatError
 
 load_dotenv()
 
-__JTW_TIMEOUT = float(getenv("JWT_EXPIRE_MINUTES"))
+try:
+    __JWT_TIMEOUT = float(getenv("JWT_EXPIRE_MINUTES"))
+    """The timeout for the java web token"""
+except ValueError:
+    __JWT_TIMEOUT = 30
+    """The timeout for the java web token"""
 
 
 def get_utc_time_now() -> datetime:
@@ -69,4 +75,4 @@ def create_user_jwt_expiry_date() -> str:
     :return: The expiry date
     """
 
-    return (get_utc_time_now() + timedelta(minutes=__JTW_TIMEOUT)).isoformat()
+    return (get_utc_time_now() + timedelta(minutes=__JWT_TIMEOUT)).isoformat()
