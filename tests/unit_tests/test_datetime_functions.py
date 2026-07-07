@@ -1,8 +1,11 @@
 """Unit tests for the datetime functions"""
 
 from datetime import UTC, datetime, timedelta
+from pathlib import Path
+from typing import Final
 
 import pytest
+from dotenv import load_dotenv
 from pytest import approx
 
 from common.helper_functions.date_and_time import (
@@ -15,6 +18,10 @@ from common.helper_functions.date_and_time import (
     validate_future_datetime_from_string,
 )
 from common.helper_functions.errors import InvalidDatetimeFormatError
+
+__ENV_PATH: Final[Path] = Path(__file__).parent.joinpath(".env")
+"""The path to the .env file"""
+load_dotenv(__ENV_PATH.absolute(), override=True)
 
 
 def test_get_datetime_now():
