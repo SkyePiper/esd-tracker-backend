@@ -429,6 +429,22 @@ uvicorn = {version = ">=0.17.6", extras = ["standard"]}
 standard = ["uvicorn[standard] (>=0.15.0)"]
 
 [[package]]
+name = "fastapi-limiter"
+version = "0.2.0"
+description = "A request rate limiter for fastapi"
+optional = false
+python-versions = "<4,>=3.9"
+groups = ["main"]
+files = [
+    {file = "fastapi_limiter-0.2.0-py3-none-any.whl", hash = "sha256:e576ebb29cc9614c2f38471c60ed0e849024e9a1b7a2aeb4c2a31a6d708b4aea"},
+    {file = "fastapi_limiter-0.2.0.tar.gz", hash = "sha256:b042259f6280056b5b2b3f506edd76c8e0648d7a5ce86c3485216a4a0fd0ec14"},
+]
+
+[package.dependencies]
+fastapi = "*"
+pyrate-limiter = ">=3.9.0"
+
+[[package]]
 name = "fastar"
 version = "0.11.0"
 description = "High-level bindings for the Rust tar crate"
@@ -1262,6 +1278,18 @@ tomlkit = ">=0.10.1"
 [package.extras]
 spelling = ["pyenchant (>=3.2,<4.0)"]
 testutils = ["gitpython (>3)"]
+
+[[package]]
+name = "pyrate-limiter"
+version = "4.4.0"
+description = "Python Rate-Limiter using Leaky-Bucket Algorithm"
+optional = false
+python-versions = ">=3.10"
+groups = ["main"]
+files = [
+    {file = "pyrate_limiter-4.4.0-py3-none-any.whl", hash = "sha256:f738dfa3c7ac1222a5ea3d31e00cfd31b5592b13ade4077afe9e8ac6293381f5"},
+    {file = "pyrate_limiter-4.4.0.tar.gz", hash = "sha256:2c0c720c4fa16c5d8199e4821bf34507fb49c007a25b786cec6fb94ffd0844aa"},
+]
 
 [[package]]
 name = "pytest"
@@ -2169,4 +2197,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12,<3.13"
-content-hash = "c84ad9ca7aff96c6025921f0231edce6bc8779440ff09cde4ce47c8fc6763752"
+content-hash = "c322622655b68999f32a404889257526bb581931ed42a0cae968252bba1f8a14"

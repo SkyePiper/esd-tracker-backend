@@ -15,6 +15,7 @@ pyjwt = "2.13.0"
 passlib = "=1.7.4"
 scrypt = "=0.9.4"
 pydantic = "=2.13.4"
+fastapi-limiter = "=0.2.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "=26.5.1"

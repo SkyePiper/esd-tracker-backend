@@ -8,13 +8,11 @@ can only import adapters.
 """
 
 from common.auth.password_utils import hash_password
-from common.database.base_database.database_controller import \
-    DatabaseController
-from common.database.user_database.user_database_adaptor import \
-    UserDatabaseAdaptor
-from common.database.user_database.user_models import (UserModel,
-                                                       UserUpdateModel)
+from common.database.base_database.database_controller import DatabaseController
+from common.database.user_database.user_database_adaptor import UserDatabaseAdaptor
+from common.database.user_database.user_models import UserModel, UserUpdateModel
 from common.enums.permissions import Permissions
+from common.helper_functions.errors import WeakPasswordError
 
 
 class UserController(DatabaseController):
@@ -53,6 +51,18 @@ class UserController(DatabaseController):
         """
 
         await self.check_permissions(user.permissions, [Permissions.CREATE_USER])
+
+        # Check password for vulnerable passwords
+        if len(new_record.password) < 12:
+            raise WeakPasswordError("A password must contain at least 12 characters")
+        if (
+            not any(character.isupper() for character in new_record.password)
+            or not any(character.isupper() for character in new_record.password)
+            or not any(character.isdigit() for character in new_record.password)
+        ):
+            raise WeakPasswordError(
+                "A password must contain at least 1 Uppercase character, 1 Lowercase character, and 1 digit"
+            )
 
         new_record.password = await hash_password(new_record.password)
 

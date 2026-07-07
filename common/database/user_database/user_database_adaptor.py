@@ -6,6 +6,8 @@ middle-man.
 
 from os import getenv
 
+from pydantic import BaseModel
+
 from common.auth.password_utils import hash_password
 from common.database.base_database.database_adapter import DatabaseAdapter
 from common.database.base_database.database_errors import RecordStillExistsError
@@ -13,7 +15,6 @@ from common.database.base_database.database_models import TableColumn
 from common.database.user_database.user_models import UserModel, UserUpdateModel
 from common.enums.database_column_types import DatabaseColumnType
 from common.enums.database_tables import Table
-from pydantic import BaseModel
 
 
 class UserDatabaseAdaptor(DatabaseAdapter):
@@ -138,5 +139,15 @@ class UserDatabaseAdaptor(DatabaseAdapter):
                 email=getenv("ADMIN_EMAIL"),
                 permissions=1,
                 password=await hash_password(getenv("ADMIN_PASSWORD")),
+            )
+        )
+        await self.add_record(
+            UserModel(
+                id=1,
+                forename="Default",
+                surname="User",
+                email=getenv("DEFAULT_USER_EMAIL"),
+                permissions=1,
+                password=await hash_password(getenv("DEFAULT_USER_PASSWORD")),
             )
         )
