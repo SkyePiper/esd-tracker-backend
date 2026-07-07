@@ -2,6 +2,7 @@
 
 from asyncio import sleep
 from os import getenv, urandom
+from random import random
 from typing import Annotated, Final
 
 from dotenv import load_dotenv
@@ -42,19 +43,19 @@ async def authenticate_user_by_email_password(email: str, password: str) -> User
     try:
         user = await user_adaptor.get_record_by_email(email)
 
-        await sleep(1 / int(urandom(1).hex(), base=16))
+        await sleep(random() * 1)
 
         if not await verify_password(password, user.password):
             raise InvalidAuthError()
 
     except RecordDoesNotExistError as e:
         # Add a random amount of sleep time to help prevent timing attacks
-        await sleep(1 / int(urandom(1).hex(), base=16))
+        await sleep(random() * 1)
 
         raise InvalidAuthError() from e
 
     # Add a random amount of sleep time to help prevent timing attacks
-    await sleep(1 / int(urandom(1).hex(), base=16))
+    await sleep(random() * 1)
 
     return user
 
