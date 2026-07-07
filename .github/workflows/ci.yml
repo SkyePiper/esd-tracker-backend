@@ -48,4 +48,4 @@ jobs:
         python -m poetry run black . --check
 
     - name: Lint
-      run: python -m pylint .
+      run: python -m poetry run pylint .
