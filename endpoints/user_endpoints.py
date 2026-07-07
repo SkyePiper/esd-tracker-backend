@@ -1,5 +1,7 @@
 """Endpoints for the user"""
 
+from fastapi import APIRouter
+
 from common.auth.auth import VALIDATE_USER
 from common.database.user_database.user_database_controller import UserController
 from common.database.user_database.user_models import (
@@ -10,7 +12,6 @@ from common.database.user_database.user_models import (
     UserUpdateModel,
 )
 from common.responses import DEFAULT_RESPONSES, SuccessResponseModel
-from fastapi import APIRouter
 
 router = APIRouter(
     prefix="/users",

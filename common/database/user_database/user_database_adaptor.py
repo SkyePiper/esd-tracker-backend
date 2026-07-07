@@ -55,7 +55,7 @@ class UserDatabaseAdaptor(DatabaseAdapter):
 
         return await self.convert_data_to_model(await self._get_record_by_id(record_id))
 
-    async def get_record_by_ids(self, **record_ids: dict[str, int]) -> tuple: ...
+    async def get_record_by_ids(self, record_ids: dict[str, int]) -> tuple: ...
 
     async def get_record_by_email(self, email: str) -> UserModel:
         """Gets a record by their email

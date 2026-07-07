@@ -1,7 +1,8 @@
 """Models used for auth"""
 
-from common.helper_functions.date_and_time import create_user_jwt_expiry_date
 from pydantic import BaseModel, EmailStr, Field
+
+from common.helper_functions.date_and_time import create_user_jwt_expiry_date
 
 
 class UserJwtDataModel(BaseModel):

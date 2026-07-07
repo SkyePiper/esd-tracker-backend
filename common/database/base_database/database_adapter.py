@@ -6,11 +6,11 @@ middle-man.
 
 from __future__ import annotations
 
-from abc import ABC, abstractmethod, abstractproperty
+from abc import ABC, abstractmethod
 from os import getenv
 from pathlib import Path
 from sqlite3 import OperationalError
-from typing import Any, Coroutine
+from typing import Any
 
 from aiosqlite import Connection, Cursor, connect
 from dotenv import load_dotenv

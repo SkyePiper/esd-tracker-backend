@@ -1,3 +1,5 @@
+"""The main module"""
+
 from contextlib import asynccontextmanager
 from typing import Annotated
 
@@ -140,7 +142,7 @@ async def handle_unauthorised_error(
 
 
 @app.exception_handler(RateLimitedError)
-async def handle_unauthorised_error(request: Request, error: RateLimitedError) -> JSONResponse:
+async def handle_rate_limited_error(request: Request, error: RateLimitedError) -> JSONResponse:
     """Handles an unauthorised error
 
     :param request: The incoming request

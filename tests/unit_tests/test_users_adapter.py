@@ -5,7 +5,10 @@ from os import getenv
 import pytest
 
 from common.auth.password_utils import hash_password, verify_password
-from common.database.base_database.database_errors import RecordDoesNotExistError, RecordStillExistsError
+from common.database.base_database.database_errors import (
+    RecordDoesNotExistError,
+    RecordStillExistsError,
+)
 from common.database.user_database.user_models import UserModel, UserUpdateModel
 
 

@@ -1,14 +1,14 @@
 """Models for the training sessions"""
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
+from pydantic import BaseModel, EmailStr, Field, field_validator
 
 from ...enums.user_session_attendance import Attendance
-from ...helper_functions.date_and_time import (get_string_datetime_now,
-                                               validate_datetime)
+from ...helper_functions.date_and_time import get_string_datetime_now, validate_datetime
 from ...responses import SuccessResponseModel
 from ..base_database.database_models import DataModel, UpdateDataModel
-from ..user_session_inter_database.user_session_inter_models import \
-    UserSessionInterModel
+from ..user_session_inter_database.user_session_inter_models import (
+    UserSessionInterModel,
+)
 
 
 class TrainingSessionModel(DataModel):

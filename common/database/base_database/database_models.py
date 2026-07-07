@@ -1,12 +1,13 @@
 """Models relating to the database"""
 
-from datetime import datetime
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from common.enums.database_column_types import DatabaseColumnType
 from common.enums.database_tables import Table
-from common.helper_functions.date_and_time import (get_string_datetime_now,
-                                                   validate_datetime)
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from common.helper_functions.date_and_time import (
+    get_string_datetime_now,
+    validate_datetime,
+)
 
 
 class TableColumn(BaseModel):

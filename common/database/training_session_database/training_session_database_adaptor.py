@@ -1,5 +1,7 @@
 """Database connector for the User Database"""
 
+from pydantic import BaseModel
+
 from common.database.base_database.database_adapter import DatabaseAdapter
 from common.database.base_database.database_models import TableColumn
 from common.database.training_session_database.training_session_models import (
@@ -8,7 +10,6 @@ from common.database.training_session_database.training_session_models import (
 )
 from common.enums.database_column_types import DatabaseColumnType
 from common.enums.database_tables import Table
-from pydantic import BaseModel
 
 
 class TrainingSessionDatabaseAdaptor(DatabaseAdapter):

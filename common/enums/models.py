@@ -1,7 +1,8 @@
 """Models for the enums"""
 
-from common.responses import SuccessResponseModel
 from pydantic import BaseModel, Field
+
+from common.responses import SuccessResponseModel
 
 
 class EnumItemModel(BaseModel):
