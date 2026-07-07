@@ -8,8 +8,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-__JWT_TIMEOUT = float(getenv("JWT_EXPIRE_MINUTES"))
-"""The timeout for the java web token"""
+try:
+    __JWT_TIMEOUT = float(getenv("JWT_EXPIRE_MINUTES"))
+    """The timeout for the java web token"""
+except ValueError:
+    __JWT_TIMEOUT = 30
+    """The timeout for the java web token"""
 
 
 def get_utc_time_now() -> datetime:
